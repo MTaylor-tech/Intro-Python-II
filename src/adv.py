@@ -38,20 +38,70 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
+synonyms = {
+    'Q': ['Q','QUIT'],
+    'N': ['N','NORTH','GO N','GO NORTH'],
+    'S': ['S','SOUTH','GO S','GO SOUTH'],
+    'E': ['E','EAST','GO E','GO EAST'],
+    'W': ['W','WEST','GO W','GO WEST'],
+    'U': ['U','UP','GO U','GO UP','CLIMB','CLIMB UP']
+    'D': ['D','DOWN','GO D','GO DOWN','CLIMB DOWN'],
+    'L': ['L','LOOK','EXAMINE'],
+    'GET': ['GET','TAKE','PICK UP','PICK']
+}
 
-name = input("What is your name, adventurer? ")
-player = Player(name, room['outside'])
+def checkDirection(direction, room):
+    if direction == 'N' and room.n_to is not None:
+        return room.n_to
+    elif direction == 'S' and room.s_to is not None:
+        return room.s_to
+    elif direction == 'E' and room.e_to is not None:
+        return room.e_to
+    elif direction == 'W' and room.w_to is not None:
+        return room.w_to
+    else:
+        return room
 
-# Make a new player object that is currently in the 'outside' room.
-loop = True
-while loop:
-    print('\n{}\n'.format(player.currentRoom.name))
-    if player.currentRoom.firstVisit:
-        print(textwrap.fill(player.currentRoom.description))
-    entry = input('\nWhat do you do now? ')
-    if entry.upper() == 'Q':
-        exit()
 
+def go(direction,player):
+    newRoom = checkDirection(direction, player.currentRoom)
+    if newRoom is player.currentRoom:
+        print('You can\'t go that way.')
+    else:
+        player.currentRoom = newRoom
+
+
+def adventure():
+    name = input("What is your name, adventurer? ")
+    if name == '':
+        name = 'adventurer'
+    player = Player(name, room['outside'])
+
+    # Make a new player object that is currently in the 'outside' room.
+    loop = True
+    while loop:
+        currentRoom = player.currentRoom
+        print('\n{}\n'.format(currentRoom.name))
+        if currentRoom.firstVisit:
+            print(textwrap.fill(currentRoom.description))
+            currentRoom.firstVisit = False
+        entry = input('\nWhat do you do now? ')
+        if entry.upper() in synonyms['Q']:
+            exit()
+        elif entry.upper() in synonyms['N']:
+            go('N',player)
+        elif entry.upper() in synonyms['S']:
+            go('S',player)
+        elif entry.upper() in synonyms['E']:
+            go('E',player)
+        elif entry.upper() in synonyms['W']:
+            go('W',player)
+        elif entry.split(' ')[0].upper() in synonyms['GET']:
+            print('Get {}'.format(entry.split(' ')[-1]))
+
+
+if __name__ == '__main__':
+    adventure()
 # Write a loop that:
 #
 # * Prints the current room name
