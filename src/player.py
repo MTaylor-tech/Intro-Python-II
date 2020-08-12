@@ -1,7 +1,7 @@
-# Write a class to hold player information, e.g. what room they are in
-# currently.
 import random
 import textwrap
+import pcolors as p
+from setup import synonyms
 
 class Player:
     def __init__(self, name, current_room, inventory=[]):
@@ -21,7 +21,7 @@ class Player:
     def go(self, direction):
         newRoom = self.current_room.checkDirection(direction)
         if newRoom is self.current_room:
-            print('You can\'t go that way.')
+            p.prRed('You can\'t go that way.')
         else:
             self.current_room = newRoom
 
@@ -33,12 +33,12 @@ class Player:
                     self.inventory.append(item)
                     self.current_room.contents.remove(item)
                     found = True
-                    print("\nTaken.")
+                    p.prRed("\nTaken.")
                     item.on_take()
             if not found:
-                print("\nI don't see that here.")
+                p.prRed("\nI don't see that here.")
         else:
-            print("\nI don't see that here.")
+            p.prRed("\nI don't see that here.")
 
     def drop(self, item_name):
         if len(self.inventory) > 0:
@@ -48,15 +48,18 @@ class Player:
                     self.inventory.remove(item)
                     self.current_room.contents.append(item)
                     found = True
-                    print("\nDropped.")
+                    p.prRed("\nDropped.")
                     item.on_drop()
             if not found:
-                print("\nYou don't have that.")
+                p.prRed("\nYou don't have that.")
         else:
-            print("\nYou don't have that.")
+            p.prRed("\nYou don't have that.")
 
     def look(self, item_name):
         found_item = None
+        if item_name in synonyms['SELF']:
+            print('\n{}\n'.format(self.__str__()))
+            return
         if len(self.inventory) > 0:
             for item in self.inventory:
                 if item.name.upper() == item_name:
@@ -69,12 +72,12 @@ class Player:
             print('\n{}\n'.format(found_item.long_name))
             print(textwrap.fill(found_item.description))
         else:
-            print("\nI don't see that here.")
+            p.prRed("\nI don't see that here.")
 
     def pack(self):
         if len(self.inventory) > 0:
-            print('\nYour pack contains:')
+            p.prYellow('\nYour pack contains:')
             for item in self.inventory:
                 print(item.long_name)
         else:
-            print('\nYour pack is empty.')
+            p.prRed('\nYour pack is empty.')

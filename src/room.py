@@ -8,21 +8,23 @@
   #   which point to the room in that respective direction.
 
 import random
+from item import LightSource
 
 class Room:
-    def __init__(self, name, description, contents=[], first_visit=True,
-                  n_to=None, s_to=None, e_to=None, w_to=None, u_to=None,
-                  d_to=None):
+    def __init__(self, name, description, contents=[], lit=True, features=[]):
         self.name = name
         self.description = description
         self.contents = contents
-        self.first_visit = first_visit
-        self.n_to = n_to
-        self.s_to = s_to
-        self.e_to = e_to
-        self.w_to = w_to
-        self.u_to = u_to
-        self.d_to = d_to
+        self.lit = lit
+        self.features = features
+        self.first_visit = True
+        self.exits = {}
+        self.n_to = None
+        self.s_to = None
+        self.e_to = None
+        self.w_to = None
+        self.u_to = None
+        self.d_to = None
 
     def __str__(self):
         c = random.randint(1,2)
@@ -66,3 +68,14 @@ class Room:
         elif direction == 'D' and self.d_to is None and room.u_to is None:
             self.d_to = room
             room.u_to = self
+
+    def isLit(self, player):
+        is_lit = self.lit
+        for item in self.contents:
+            if isinstance(item, LightSource):
+                is_lit = True
+        for item in player.inventory:
+            if isinstance(item, LightSource):
+                if item.on:
+                    is_lit = True
+        return is_lit
