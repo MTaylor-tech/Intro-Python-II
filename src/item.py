@@ -20,7 +20,7 @@ class Item:
 class LightSource(Item):
     def __init__(self, name, long_name, description, on=False, take_text='',
                  drop_text='', use_text=''):
-        super(self,name,long_name,description,take_text,drop_text,use_text)
+        super().__init__(name,long_name,description,take_text,drop_text,use_text)
         self.on = on
 
     def use(self):

@@ -1,7 +1,7 @@
 import random
 import textwrap
 import pcolors as p
-from setup import synonyms
+from vars import synonyms
 
 class Player:
     def __init__(self, name, current_room, inventory=[]):
@@ -19,11 +19,11 @@ class Player:
             return "I'm not sure, but it might be {}.".format(self.name)
 
     def go(self, direction):
-        newRoom = self.current_room.checkDirection(direction)
-        if newRoom is self.current_room:
+        new_room = self.current_room.check_direction(direction)
+        if new_room is self.current_room:
             p.prRed('You can\'t go that way.')
         else:
-            self.current_room = newRoom
+            self.current_room = new_room
 
     def take(self, item_name):
         if len(self.current_room.contents) > 0:
@@ -56,23 +56,30 @@ class Player:
             p.prRed("\nYou don't have that.")
 
     def look(self, item_name):
-        found_item = None
-        if item_name in synonyms['SELF']:
-            print('\n{}\n'.format(self.__str__()))
-            return
+        if self.current_room.is_lit(self):
+            found_item = None
+            if item_name in synonyms['SELF']:
+                print('\n{}\n'.format(self.__str__()))
+                return
+            found_item = self.has_item(item_name)
+            if len(self.current_room.contents) > 0:
+                for item in self.current_room.contents:
+                    if item.name.upper() == item_name:
+                        found_item = item
+            if found_item is not None:
+                print('\n{}\n'.format(found_item.long_name))
+                print(textwrap.fill(found_item.description))
+            else:
+                p.prRed("\nI don't see that here.")
+        else:
+            p.prGrey('\nIt is too dark to see here.\n')
+
+    def has_item(self, item_name):
         if len(self.inventory) > 0:
             for item in self.inventory:
                 if item.name.upper() == item_name:
-                    found_item = item
-        if len(self.current_room.contents) > 0:
-            for item in self.current_room.contents:
-                if item.name.upper() == item_name:
-                    found_item = item
-        if found_item is not None:
-            print('\n{}\n'.format(found_item.long_name))
-            print(textwrap.fill(found_item.description))
-        else:
-            p.prRed("\nI don't see that here.")
+                    return item
+        return None
 
     def pack(self):
         if len(self.inventory) > 0:
@@ -81,3 +88,10 @@ class Player:
                 print(item.long_name)
         else:
             p.prRed('\nYour pack is empty.')
+
+    def use(self, item_name):
+        item = self.has_item(item_name)
+        if item is not None:
+            item.use()
+        else:
+            p.prRed('\nYou don\'t have that item.')
