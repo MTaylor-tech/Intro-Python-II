@@ -9,35 +9,45 @@ def adventure():
         name = 'adventurer'
     player = Player(name, rooms['outside'])
 
-    # Make a new player object that is currently in the 'outside' room.
-    loop = True
-    while loop:
+    while True:
         current_room = player.current_room
         print('\n{}\n'.format(current_room.name))
-        print(textwrap.fill(current_room.description))
+        if current_room.first_visit:
+            print(textwrap.fill(current_room.description))
+            current_room.first_visit = False
         if len(current_room.contents) > 0:
             print('You see here: ')
             for item in current_room.contents:
                 print(item.long_name)
-        entry = input('\nWhat do you do now? ')
+        entry = input('\nWhat do you do now? ').upper()
+        split = entry.split(' ')
         if entry.upper() in synonyms['Q']:
             exit()
-        elif entry.upper() in synonyms['N']:
+        elif entry in synonyms['N']:
             player.go('N')
-        elif entry.upper() in synonyms['S']:
+        elif entry in synonyms['S']:
             player.go('S')
-        elif entry.upper() in synonyms['E']:
+        elif entry in synonyms['E']:
             player.go('E')
-        elif entry.upper() in synonyms['W']:
+        elif entry in synonyms['W']:
             player.go('W')
-        elif entry.upper() in synonyms['U']:
+        elif entry in synonyms['U']:
             player.go('U')
-        elif entry.upper() in synonyms['D']:
+        elif entry in synonyms['D']:
             player.go('D')
-        elif entry.split(' ')[0].upper() in synonyms['GET']:
-            print('Get {}'.format(entry.split(' ')[-1]))
-        elif entry.split(' ')[0].upper() in synonyms['DROP']:
-            print('Drop {}'.format(entry.split(' ')[-1]))
+        elif entry in synonyms['I']:
+            player.pack()
+        elif split[0] in synonyms['GET']:
+            player.take(split[-1])
+        elif split[0] in synonyms['DROP']:
+            player.drop(split[-1])
+        elif split[0] in synonyms['L']:
+            if len(split) > 1:
+                player.look(split[-1])
+            else:
+                current_room.first_visit = True
+        else:
+            print('\nI don\'t know what you mean.')
 
 
 if __name__ == '__main__':

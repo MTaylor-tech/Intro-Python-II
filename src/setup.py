@@ -3,7 +3,10 @@ from item import Item
 
 items = {
     'knife': Item("knife","a rusty knife","""It's an old rusty knife. You don't
-                  think it would cut very well.""")
+think it would cut very well."""),
+    'rope': Item("rope","some old rope","""It looks like someone used this a
+very long time ago. It is worn and fraying.""","A lot of good it'll do ya.",
+"About time you got rid of that.")
 }
 
 # Declare all the rooms
@@ -17,7 +20,7 @@ passages run north and east.""", [items['knife']]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", [items['rope']]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
@@ -27,20 +30,19 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 
     'cliffside': Room("On the Side of the Cliff", """You've found an old,
-                      fraying rope to climb the cliff. The winds buffet you and
-                      make the climb difficult."""),
+fraying rope to climb the cliff. The winds buffet you and
+make the climb difficult."""),
 
     'bottom': Room("Bottom of the Canyon", """Here at the bottom of the canyon,
-                   everything is peaceful. A stream runs nearby. You might be
-                   able to follow it the West. The cliff on the opposite side
-                   looks unclimbable. There is an old, fraying rope here,
-                   leading up."""),
+everything is peaceful. A stream runs nearby. You might be able to follow it
+west. The cliff on the opposite side looks unclimbable. There is an old, fraying
+rope here, leading up."""),
 
     'streambed': Room("Along the Stream", """Following the stream is a bit
-                      tricky, with all the rocks here. The path leads East
-                      and West."""),
+tricky, with all the rocks here. The path leads east and west."""),
 
-    'beach': Room("Beach", """A small beach at the side of the stream.""")
+    'beach': Room("Beach", """A small beach at the side of the stream. A path
+follows the stream east.""")
 }
 
 
@@ -70,5 +72,6 @@ synonyms = {
     'D': ['D','DOWN','GO D','GO DOWN','CLIMB DOWN'],
     'L': ['L','LOOK','EXAMINE'],
     'GET': ['GET','TAKE','PICK UP','PICK'],
-    'DROP': ['DROP','REMOVE','PUT DOWN','LEAVE']
+    'DROP': ['DROP','REMOVE','PUT DOWN','LEAVE'],
+    'I': ['I','INV','INVENTORY']
 }

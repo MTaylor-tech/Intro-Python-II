@@ -10,11 +10,13 @@
 import random
 
 class Room:
-    def __init__(self, name, description, contents=[], n_to=None, s_to=None,
-                 e_to=None, w_to=None, u_to=None, d_to=None):
+    def __init__(self, name, description, contents=[], first_visit=True,
+                  n_to=None, s_to=None, e_to=None, w_to=None, u_to=None,
+                  d_to=None):
         self.name = name
         self.description = description
         self.contents = contents
+        self.first_visit = first_visit
         self.n_to = n_to
         self.s_to = s_to
         self.e_to = e_to
