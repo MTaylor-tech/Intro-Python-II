@@ -1,5 +1,6 @@
 from item import Item, LightSource
 from room import Room
+from player import Player
 
 items = {
     'knife': Item("knife","a rusty knife","""It's an old rusty knife. You don't think it would cut very well."""),
@@ -23,3 +24,23 @@ rooms = {
     'streambed': Room("Along the Stream", """Following the stream is a bit tricky, with all the rocks here. The path leads east and west."""),
     'beach': Room("Beach", """A small beach at the side of the stream. A path follows the stream east.""")
 }
+
+class Defaults:
+    def __init__(self):
+        self.player = Player('', None)
+        self.items = items
+        self.rooms = rooms
+        self.run_rooms()
+        self.player.current_room = self.rooms['outside']
+
+    def run_rooms(self):
+        self.rooms['narrow'].lit = False
+        self.rooms['outside'].set_direction('N',rooms['foyer'])
+        self.rooms['foyer'].set_direction('N',rooms['overlook'])
+        self.rooms['foyer'].set_direction('E',rooms['narrow'])
+        self.rooms['narrow'].set_direction('N',rooms['treasure'])
+        self.rooms['overlook'].set_direction('D',rooms['cliffside'])
+        self.rooms['cliffside'].set_direction('D',rooms['bottom'])
+        self.rooms['bottom'].set_direction('W',rooms['streambed'])
+        self.rooms['streambed'].set_direction('W',rooms['beach'])
+        self.rooms['treasure'].set_direction('SW',rooms['foyer'])

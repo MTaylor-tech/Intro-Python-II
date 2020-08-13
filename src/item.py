@@ -6,6 +6,7 @@ class Item:
         self.description = description
         self.take_text = take_text
         self.drop_text = drop_text
+        self.use_text = use_text
 
     def use(self):
         print('You use {}. {}'.format(self.long_name,self.use_text))

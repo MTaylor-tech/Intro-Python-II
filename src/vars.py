@@ -18,10 +18,15 @@ synonyms = {
     'SW': ['SW','GO SW','SOUTHWEST','GO SOUTHWEST','SOUTH WEST','GO SOUTH WEST'],
     'NE': ['NE','GO NE','NORTHEAST','GO NORTHEAST','NORTH EAST','GO NORTH EAST'],
     'SE': ['SE','GO SE','SOUTHEAST','GO SOUTHEAST','SOUTH EAST','GO SOUTH EAST'],
-    'YES': ['YES','Y','']
+    'YES': ['YES','Y',''],
+    'IN': ['IN','GO IN','INSIDE','GO INSIDE'],
+    'OUT': ['OUT','GO OUT','GET OUT','OUTSIDE','GO OUTSIDE'],
+    'ON': ['ON','GET ON','STAND ON'],
+    'OFF': ['OFF','GET OFF'],
+    'ALL': ['ALL','EVERYTHING','EVERY THING']
 }
 
-directions = ['N','S','E','W','U','D','NE','SW','SE','NW']
+directions = ['N','S','E','W','U','D','NE','SW','SE','NW','IN','OUT','ON','OFF']
 
 opposites = {
     'N': 'S', 'S': 'N',
@@ -29,5 +34,6 @@ opposites = {
     'U': 'D', 'D': 'U',
     'NE': 'SW', 'SW': 'NE',
     'SE': 'NW', 'NW': 'SE',
-    'ON': 'OFF', 'OFF': 'ON'
+    'ON': 'OFF', 'OFF': 'ON',
+    'IN': 'OUT', 'OUT': 'IN'
 }

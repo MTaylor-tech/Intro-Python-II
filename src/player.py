@@ -26,34 +26,44 @@ class Player:
             self.current_room = new_room
 
     def take(self, item_name):
-        if len(self.current_room.contents) > 0:
-            found = False
+        if item_name in synonyms['ALL']:
+            item_list = []
             for item in self.current_room.contents:
-                if item.name.upper() == item_name:
-                    self.inventory.append(item)
-                    self.current_room.contents.remove(item)
-                    found = True
-                    p.prRed("\nTaken.")
-                    item.on_take()
-            if not found:
-                p.prRed("\nI don't see that here.")
+                self.inventory.append(item)
+                item_list.append(item)
+                p.prRed("\nTaken.")
+                item.on_take()
+            for item in item_list:
+                self.current_room.contents.remove(item)
         else:
-            p.prRed("\nI don't see that here.")
+            item = self.current_room.has_item(item_name)
+            if item is not None:
+                self.inventory.append(item)
+                self.current_room.contents.remove(item)
+                p.prRed("\nTaken.")
+                item.on_take()
+            else:
+                p.prRed("\nI don't see that here.")
 
     def drop(self, item_name):
-        if len(self.inventory) > 0:
-            found = False
+        if item_name in synonyms['ALL']:
+            item_list = []
             for item in self.inventory:
-                if item.name.upper() == item_name:
-                    self.inventory.remove(item)
-                    self.current_room.contents.append(item)
-                    found = True
-                    p.prRed("\nDropped.")
-                    item.on_drop()
-            if not found:
-                p.prRed("\nYou don't have that.")
+                item_list.append(item)
+                self.current_room.contents.append(item)
+                p.prRed("\nDropped.")
+                item.on_drop()
+            for item in item_list:
+                self.inventory.remove(item)
         else:
-            p.prRed("\nYou don't have that.")
+            item = self.has_item(item_name)
+            if item is not None:
+                self.inventory.remove(item)
+                self.current_room.contents.append(item)
+                p.prRed("\nDropped.")
+                item.on_drop()
+            else:
+                p.prRed("\nYou don't have that.")
 
     def look(self, item_name):
         if self.current_room.is_lit(self):
@@ -62,10 +72,9 @@ class Player:
                 print('\n{}\n'.format(self.__str__()))
                 return
             found_item = self.has_item(item_name)
-            if len(self.current_room.contents) > 0:
-                for item in self.current_room.contents:
-                    if item.name.upper() == item_name:
-                        found_item = item
+            item_in_room = self.current_room.has_item_or_feature(item_name)
+            if item_in_room is not None:
+                found_item = item_in_room
             if found_item is not None:
                 print('\n{}\n'.format(found_item.long_name))
                 print(textwrap.fill(found_item.description))

@@ -1,15 +1,14 @@
 import textwrap
 import os.path as path
-#from setup import store_data, load_data, load_defaults
-from setup import DataManager
+from datamanager import DataManager
 from vars import synonyms, opposites, directions
 import pcolors as p
 
 
 class Adventure:
-    def __init__(self, data, data_manager):
-        self.player = data['player']
-        self.data = data
+    def __init__(self, data_manager):
+        self.player = data_manager.data['player']
+        self.data = data_manager.data
         self.data_manager = data_manager
 
     def mainLoop(self):
@@ -43,7 +42,7 @@ class Adventure:
         if entry == 'SHOW COLORS':
             p.show_colors()
         if entry in synonyms['Q']:
-            self.data_manager.store_data(self.data)
+            self.data_manager.store_data()
             exit()
         elif entry in synonyms['I']:
             self.player.pack()
@@ -76,18 +75,18 @@ def adventure():
     else:
         print('Welcome, {}.'.format(name))
     data_manager = DataManager(name)
-    if path.exists(data_manager.filename):
+    if path.exists(data_manager.get_filename()):
         entry = input('I see you have a saved game. Would you like to load it? (Y/n)').upper()
         if entry in synonyms['YES']:
-            data = data_manager.load_data()
+            data_manager.load_data()
             loaded = True
         else:
-            data = data_manager.load_defaults()
+            data_manager.load_defaults()
     else:
-        data = data_manager.load_defaults()
+        data_manager.load_defaults()
     if not loaded:
-        data['player'].name = name
-    game = Adventure(data, data_manager)
+        data_manager.data['player'].name = name
+    game = Adventure(data_manager)
     while True:
         game.mainLoop()
 
