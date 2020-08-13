@@ -46,6 +46,9 @@ class Adventure:
             exit()
         elif entry in synonyms['I']:
             self.player.pack()
+        elif split[0] == '@TEL':
+            if self.data.rooms[split[1]] is not None:
+                self.player.current_room = self.data.rooms[split[1]]
         elif split[0] in synonyms['GET']:
             self.player.take(split[-1])
         elif split[0] in synonyms['DROP']:

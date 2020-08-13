@@ -1,0 +1,5 @@
+Name,Long Name,Description,Rooms,ILF,On,
+Crystal,a glowing purple crystal,"This little crystal glows with a pleasant purple light. It?s not bright enough to light up the room, but it is very soothing to look at.",crystal,I,N,
+Stream,the stream,"The stream is small, but swift. It looks shallow enough to cross, but the cliff on the other side is unclimbable.",streambed bottom beach,F,N,
+Beach,the beach,"A little strip of sand by the stream, it?s generous to call this a beach. The sun barely makes its way down here, so there is no sunbathing either.",beach,F,N,
+Lantern,a lantern,An old miner?s lantern,foyer,L,Y,

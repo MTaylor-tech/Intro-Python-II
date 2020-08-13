@@ -40,8 +40,15 @@ def inColor(str, color): return input("\u001b[38;5;{}m{}\u001b[0m".format(color,
 def prNiceBlue(str): print("\033[96m{}\033[00m".format(str))
 def inNiceBlue(str): return input("\033[96m{}\033[00m".format(str))
 
+def prItalic(str): print("\x1B[3m{}\x1B[23m".format(str))
+def inItalic(str): return input("\x1B[3m{}\x1B[23m".format(str))
+
 def show_colors():
     for i in range(16):
         for j in range(16):
             n = i*16+j
             prColor('{}'.format(n),n)
+
+italic = "\x1B[3m"
+bold = "\x1B[2m"
+clear_style = "\x1B[23m"

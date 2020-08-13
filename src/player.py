@@ -2,6 +2,7 @@ import random
 import textwrap
 import pcolors as p
 from vars import synonyms
+from item import LightSource
 
 class Player:
     def __init__(self, name, current_room, inventory=[]):
@@ -89,6 +90,13 @@ class Player:
                 if item.name.upper() == item_name:
                     return item
         return None
+
+    def has_light(self):
+        for item in self.inventory:
+            if isinstance(item, LightSource):
+                if item.on:
+                    return True
+        return False
 
     def pack(self):
         if len(self.inventory) > 0:

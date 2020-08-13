@@ -1,0 +1,3 @@
+Tag,Name,Description,Lit,Paths,,
+narrow2,A Narrow Passageway,This part of the cave is a tight squeeze. You can barely breathe from the closeness of the rock walls and the smell of something long dead. The narrow path leads north and west.,N,w.second n.narrow3,,
+narrow3,A Narrow Passageway,"Narrow and dark, it’s spooky in here, especially because you can’t see what’s around the bend. The passageway forks here, and tight openings lead north, south, and east.",N,,,

@@ -33,10 +33,8 @@ class Room:
             if isinstance(item, LightSource):
                 if item.on:
                     lit = True
-        for item in player.inventory:
-            if isinstance(item, LightSource):
-                if item.on:
-                    lit = True
+        if player.has_light():
+            lit = True
         return lit
 
     def has_item(self, item_name):
@@ -54,7 +52,19 @@ class Room:
         return None
 
     def has_item_or_feature(self, item_name):
-        found_item = has_item(item_name)
+        found_item = self.has_item(item_name)
         if found_item is None:
-            found_item = has_feature(item_name)
+            found_item = self.has_feature(item_name)
         return found_item
+
+    def add_item(self, item):
+        self.contents.append(item)
+
+    def rm_item(self, item):
+        self.contents.remove(item)
+
+    def add_feature(self, item):
+        self.features.append(item)
+
+    def rm_feature(self, item):
+        self.features.remove(item)
