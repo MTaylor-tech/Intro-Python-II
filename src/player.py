@@ -24,7 +24,9 @@ class Player:
         if new_room is self.current_room:
             p.prRed('You can\'t go that way.')
         else:
+            self.current_room.characters.remove(self)
             self.current_room = new_room
+            new_room.characters.append(self)
 
     def take(self, item_name):
         if item_name in synonyms['ALL']:
@@ -73,7 +75,7 @@ class Player:
                 print('\n{}\n'.format(self.__str__()))
                 return
             found_item = self.has_item(item_name)
-            item_in_room = self.current_room.has_item_or_feature(item_name)
+            item_in_room = self.current_room.has_ifc(item_name)
             if item_in_room is not None:
                 found_item = item_in_room
             if found_item is not None:
@@ -112,3 +114,9 @@ class Player:
             item.use(self)
         else:
             p.prRed('\nYou don\'t have that item.')
+
+class NonPlayerCharacter(Player):
+    def __init__(self, name, long_name, description, current_room, inventory=[]):
+        super().__init__(name, current_room, inventory)
+        self.description = description
+        self.long_name = long_name

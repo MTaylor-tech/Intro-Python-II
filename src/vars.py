@@ -37,3 +37,8 @@ opposites = {
     'ON': 'OFF', 'OFF': 'ON',
     'IN': 'OUT', 'OUT': 'IN'
 }
+#
+# needs = {}
+#
+# def add_rooms(rooms):
+#     needs = rooms

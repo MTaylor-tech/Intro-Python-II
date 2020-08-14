@@ -1,16 +1,19 @@
 import random
 from item import LightSource
 from vars import directions, opposites
+from player import NonPlayerCharacter
 
 
 class Room:
-    def __init__(self, name, description, contents=[], lit=True, features=[]):
+    def __init__(self, tag, name, description, lit=True):
+        self.tag = tag
         self.name = name
         self.description = description
-        self.contents = contents
+        self.contents = []
         self.lit = lit
-        self.features = features
+        self.features = []
         self.first_visit = True
+        self.characters = []
         self.exits = {}
         for direction in directions:
             self.exits[direction] = None
@@ -40,14 +43,14 @@ class Room:
     def has_item(self, item_name):
         if len(self.contents) > 0:
             for item in self.contents:
-                if item.name.upper() == item_name:
+                if item_name in item.name.upper():
                     return item
         return None
 
     def has_feature(self, item_name):
         if len(self.features) > 0:
             for item in self.features:
-                if item.name.upper() == item_name:
+                if item_name in item.name.upper():
                     return item
         return None
 
@@ -56,6 +59,20 @@ class Room:
         if found_item is None:
             found_item = self.has_feature(item_name)
         return found_item
+
+    def has_ifc(self,query):
+        found_item = self.has_item_or_feature(query)
+        if found_item is None:
+            found_item = self.has_char(query)
+        return found_item
+
+    def has_char(self, char_name):
+        if len(self.characters) > 0:
+            for char in self.characters:
+                if isinstance(char,NonPlayerCharacter):
+                    if char_name in char.name.upper() or char_name in char.long_name.upper():
+                        return char
+        return None
 
     def add_item(self, item):
         self.contents.append(item)

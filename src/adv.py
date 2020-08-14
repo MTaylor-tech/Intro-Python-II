@@ -3,6 +3,7 @@ import os.path as path
 from datamanager import DataManager
 from vars import synonyms, opposites, directions
 import pcolors as p
+from item_functions import sb
 
 
 class Adventure:
@@ -10,6 +11,7 @@ class Adventure:
         self.player = data_manager.data['player']
         self.data = data_manager.data
         self.data_manager = data_manager
+        sb.set_datamanager(data_manager)
 
     def mainLoop(self):
         self.show_room()
@@ -21,11 +23,16 @@ class Adventure:
             p.prGreen('\n{}\n'.format(current_room.name))
             if current_room.first_visit:
                 print(textwrap.fill(current_room.description))
-                current_room.first_visit = False
+                # current_room.first_visit = False
             if len(current_room.contents) > 0:
                 p.prYellow('You see here:')
                 for item in current_room.contents:
                     print(item.long_name)
+            if len(current_room.characters) > 1:
+                p.prYellow('Also here:')
+                for char in current_room.characters:
+                    if char is not self.player:
+                        print(char.name)
         else:
             p.prGrey('\nIt is dark here.\n')
 
@@ -40,12 +47,14 @@ class Adventure:
         if split[0] == '@TEL':
             target = self.data['rooms'].get(split[1].lower())
             if target is not None:
+                self.player.current_room.characters.remove(self.player)
                 self.player.current_room = target
+                target.characters.append(self.player)
             else:
                 print("That location is unknown to me.")
         elif entry == '@COLORS':
             p.show_colors()
-        elif split[0] == '@SUMMON':
+        elif split[0] == '@CLONE':
             target = self.data['items'].get(split[1].lower())
             if target is not None:
                 self.player.current_room.add_item(target)
