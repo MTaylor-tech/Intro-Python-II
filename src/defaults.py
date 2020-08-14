@@ -11,13 +11,14 @@ class Defaults:
         self.player = Player('', None)
         self.items = {}
         self.rooms = {}
+        self.npcs = {}
         self.rooms_to_connect = []
         self.process_csv_file('rooms')
         self.process_csv_file('items')
         self.player.current_room = self.rooms['outside']
         self.connect_rooms()
-        npc = NonPlayerCharacter('a man','Lord Alfred','A tall slender man.',self.rooms['outside'])
-        self.rooms['outside'].characters.extend([self.player,npc])
+        self.npcs['alfred'] = NonPlayerCharacter('a man','Lord Alfred','A tall slender man.',self.rooms['outside'])
+        self.rooms['outside'].characters.extend([self.player,self.npcs['alfred']])
 
     def connect_rooms(self):
         for path in self.rooms_to_connect:

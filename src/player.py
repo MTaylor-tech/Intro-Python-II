@@ -115,8 +115,38 @@ class Player:
         else:
             p.prRed('\nYou don\'t have that item.')
 
+    def say(self, phrase):
+        if len(phrase) > 1:
+            phrase.remove(phrase[0])
+            phrase = ' '.join(phrase)
+            print('\nYou say, \"{}\"'.format(phrase))
+        else:
+            print('\nWhat would you like to say?')
+
 class NonPlayerCharacter(Player):
     def __init__(self, name, long_name, description, current_room, inventory=[]):
         super().__init__(name, current_room, inventory)
         self.description = description
         self.long_name = long_name
+
+    def say(self, phrase):
+        phrase.remove(phrase[0])
+        phrase = ' '.join(phrase)
+        print('\n{} says, \"{}\"'.format(self.long_name,phrase))
+
+    def force(self,spRaw):
+        spRaw.remove(spRaw[0])
+        spRaw.remove(spRaw[0])
+        command = spRaw[0].upper()
+        if command in synonyms['SAY']:
+            self.say(spRaw)
+        elif command in synonyms['GO']:
+            self.go(spRaw[1].upper())
+        elif command in synonyms['TAKE']:
+            self.take(spRaw[1].upper())
+        elif command in synonyms['DROP']:
+            self.drop(spRaw[1].upper())
+        elif command in synonyms['USE']:
+            self.use(spRaw[1].upper())
+        else:
+            print("I don't know what you mean by \"{}\"".format(' '.join(spRaw)))

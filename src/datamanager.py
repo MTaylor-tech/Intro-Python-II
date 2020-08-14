@@ -29,4 +29,4 @@ class DataManager:
         self.data['player']= defaults.player
         self.data['rooms'] = defaults.rooms
         self.data['items'] = defaults.items
-        # self.functions = defaults.functions
+        self.data['npcs'] = defaults.npcs

@@ -14,6 +14,7 @@ synonyms = {
     'ROOM': ['ROOM','CHAMBER','LANDSCAPE'],
     'SELF': ['SELF','ME','MYSELF','PLAYER'],
     'USE': ['USE','OPERATE','TURN'],
+    'SAY': ['SAY','YELL','SHOUT','SPEAK','CALL'],
     'NW': ['NW','GO NW','NORTHWEST','GO NORTHWEST','NORTH WEST','GO NORTH WEST','NORTH-WEST','GO NORTH-WEST'],
     'SW': ['SW','GO SW','SOUTHWEST','GO SOUTHWEST','SOUTH WEST','GO SOUTH WEST','SOUTH-WEST','GO SOUTH-WEST'],
     'NE': ['NE','GO NE','NORTHEAST','GO NORTHEAST','NORTH EAST','GO NORTH EAST','NORTH-EAST','GO NORTH-EAST'],
@@ -23,7 +24,8 @@ synonyms = {
     'OUT': ['OUT','GO OUT','GET OUT','OUTSIDE','GO OUTSIDE'],
     'ON': ['ON','GET ON','STAND ON'],
     'OFF': ['OFF','GET OFF'],
-    'ALL': ['ALL','EVERYTHING','EVERY THING']
+    'ALL': ['ALL','EVERYTHING','EVERY THING'],
+    'GO': ['GO']
 }
 
 directions = ['N','S','E','W','U','D','NE','SW','SE','NW','IN','OUT','ON','OFF']
@@ -37,8 +39,3 @@ opposites = {
     'ON': 'OFF', 'OFF': 'ON',
     'IN': 'OUT', 'OUT': 'IN'
 }
-#
-# needs = {}
-#
-# def add_rooms(rooms):
-#     needs = rooms

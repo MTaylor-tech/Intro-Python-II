@@ -1,3 +1,5 @@
+import pcolors as p
+
 class SitBetween:
     def __init__(self, datamanager=None,rooms=None):
         self.datamanager = datamanager
@@ -22,25 +24,25 @@ def lantern_use(lantern, player):
     print("You can't turn it on! What are you going to do, {}?".format(player.name))
 
 def crystal_take(crystal, player):
-    print("You feel warm inside.")
+    p.prLightPurple("You feel warm inside.")
     global crystal_counter
     if crystal_counter >= 3:
         crystal_counter = 0
 
 def crystal_drop(crystal, player):
-    print("You are so reluctant to part with it.")
+    p.prLightPurple("You are so reluctant to part with it.")
     global crystal_counter
     if crystal_counter < 3:
         player.take('CRYSTAL')
         crystal_counter += 1
 
 def key_use(key, player):
-    if player.current_room.name == 'Narrow Passage':
+    if player.current_room.tag == 'narrow':
         target = sb.rooms.get('treasure')
         if target is not None:
             player.current_room.set_direction('N',target)
     else:
-        print("You can't use that here.")
+        p.prRed("You can't use that here.")
 
 functions = {
     'knife_use': knife_use,

@@ -43,7 +43,7 @@ class Adventure:
                     split.remove(word)
         return split
 
-    def god_commands(self,entry,split):
+    def god_commands(self,entry,split,spRaw):
         if split[0] == '@TEL':
             target = self.data['rooms'].get(split[1].lower())
             if target is not None:
@@ -60,12 +60,41 @@ class Adventure:
                 self.player.current_room.add_item(target)
             else:
                 print("I can't find that.")
+        elif split[0] == '@SUMMON':
+            target = self.data['npcs'].get(split[1].lower())
+            if target is not None:
+                target.current_room.characters.remove(target)
+                target.current_room = self.player.current_room
+                self.player.current_room.characters.append(target)
+                p.prGreen('Summoned {}'.format(target.long_name))
+            else:
+                print("I don't know who you mean.")
+        elif split[0] == '@DESTROY':
+            target = self.player.has_item(split[1])
+            if target is not None:
+                p.prRed('Destroyed {}'.format(target.long_name))
+                self.player.inventory.remove(target)
+            else:
+                target = self.player.current_room.has_item(split[1])
+                if target is not None:
+                    p.prRed('Destroyed {}'.format(target.long_name))
+                    self.player.current_room.contents.remove(target)
+                else:
+                    print("I can't find that.")
+        elif split[0] == '@FORCE':
+            target = self.data['npcs'].get(split[1].lower())
+            if target is not None:
+                target.force(spRaw)
+            else:
+                print("I don't know who you mean.")
 
     def get_input(self):
-        entry = p.inNiceBlue('\nWhat do you do now? ').upper()
+        raw = p.inNiceBlue('\nWhat do you do now? ')
+        entry = raw.upper()
         split = self.rm_extra_words(entry.split(' '))
+        spRaw = raw.split(' ')
         if entry[0] == '@':
-            self.god_commands(entry, split)
+            self.god_commands(entry, split, spRaw)
         elif entry in synonyms['Q']:
             self.data_manager.store_data()
             exit()
@@ -77,6 +106,8 @@ class Adventure:
             self.player.drop(split[-1])
         elif split[0] in synonyms['USE']:
             self.player.use(split[-1])
+        elif split[0] in synonyms['SAY']:
+            self.player.say(spRaw)
         elif split[0] in synonyms['L']:
             if len(split) > 1 and split[-1] not in synonyms['ROOM']:
                 self.player.look(split[-1])
