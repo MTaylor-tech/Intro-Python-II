@@ -1,44 +1,43 @@
+from item_functions import functions
+
 class Item:
-    def __init__(self, name, long_name, description, taken=None,
-                 dropped=None, used=None):
+    def __init__(self, name, long_name, description):
         self.name = name
         self.long_name = long_name
         self.description = description
-        self.taken = taken
-        self.dropped = dropped
-        self.used = used
 
-    def use(self):
+    def use(self, player):
         print('You use {}.'.format(self.long_name))
-        if self.used is not None:
-            self.used()
+        fn = functions.get('{}_use'.format(self.name.lower()))
+        if fn is not None:
+            fn(self, player)
 
-    def on_take(self):
+    def on_take(self, player):
         print('You now have {}.'.format(self.long_name))
-        if self.taken is not None:
-            self.taken()
+        fn = functions.get('{}_take'.format(self.name.lower()))
+        if fn is not None:
+            fn(self, player)
 
-    def on_drop(self):
+    def on_drop(self, player):
         print('You have dropped {}.'.format(self.long_name))
-        if self.dropped is not None:
-            self.dropped()
+        fn = functions.get('{}_drop'.format(self.name.lower()))
+        if fn is not None:
+            fn(self, player)
 
 
 class LightSource(Item):
-    def __init__(self, name, long_name, description, on=False, taken=None,
-                 dropped=None, used=None):
-        super().__init__(name,long_name,description,taken,dropped,used)
+    def __init__(self, name, long_name, description, on=False):
+        super().__init__(name,long_name,description)
         self.on = on
 
-    def use(self):
+    def use(self, player):
         if self.on:
             self.turn_off()
             print('You turn off {}.'.format(self.long_name))
         else:
             self.turn_on()
             print('You turn on {}.'.format(self.long_name))
-        if self.used is not None:
-            self.used()
+        super().use(player)
 
     def turn_off(self):
         self.on = False
@@ -46,7 +45,9 @@ class LightSource(Item):
     def turn_on(self):
         self.on = True
 
-    def on_drop(self):
+    def on_take(self,player):
+        super().on_take(player)
+
+    def on_drop(self, player):
         print('It\'s not a good idea to drop your light source.')
-        if self.dropped is not None:
-            self.dropped()
+        super().on_drop(player)

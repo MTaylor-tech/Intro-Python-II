@@ -33,7 +33,7 @@ class Player:
                 self.inventory.append(item)
                 item_list.append(item)
                 p.prRed("\nTaken.")
-                item.on_take()
+                item.on_take(self)
             for item in item_list:
                 self.current_room.contents.remove(item)
         else:
@@ -42,7 +42,7 @@ class Player:
                 self.inventory.append(item)
                 self.current_room.contents.remove(item)
                 p.prRed("\nTaken.")
-                item.on_take()
+                item.on_take(self)
             else:
                 p.prRed("\nI don't see that here.")
 
@@ -53,7 +53,7 @@ class Player:
                 item_list.append(item)
                 self.current_room.contents.append(item)
                 p.prRed("\nDropped.")
-                item.on_drop()
+                item.on_drop(self)
             for item in item_list:
                 self.inventory.remove(item)
         else:
@@ -62,7 +62,7 @@ class Player:
                 self.inventory.remove(item)
                 self.current_room.contents.append(item)
                 p.prRed("\nDropped.")
-                item.on_drop()
+                item.on_drop(self)
             else:
                 p.prRed("\nYou don't have that.")
 
@@ -109,6 +109,6 @@ class Player:
     def use(self, item_name):
         item = self.has_item(item_name)
         if item is not None:
-            item.use()
+            item.use(self)
         else:
             p.prRed('\nYou don\'t have that item.')

@@ -8,6 +8,7 @@ class DataManager:
     def __init__(self, data={}, name=''):
         self.set_filename(name)
         self.data = data
+        self.functions = {}
 
     def set_filename(self, name):
         self._filename = './data/{}.dat'.format(''.join(name.lower().split(' ')))
@@ -28,3 +29,4 @@ class DataManager:
         self.data['player']= defaults.player
         self.data['rooms'] = defaults.rooms
         self.data['items'] = defaults.items
+        # self.functions = defaults.functions

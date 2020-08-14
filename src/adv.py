@@ -36,19 +36,32 @@ class Adventure:
                     split.remove(word)
         return split
 
+    def god_commands(self,entry,split):
+        if split[0] == '@TEL':
+            target = self.data['rooms'].get(split[1].lower())
+            if target is not None:
+                self.player.current_room = target
+            else:
+                print("That location is unknown to me.")
+        elif entry == '@COLORS':
+            p.show_colors()
+        elif split[0] == '@SUMMON':
+            target = self.data['items'].get(split[1].lower())
+            if target is not None:
+                self.player.current_room.add_item(target)
+            else:
+                print("I can't find that.")
+
     def get_input(self):
         entry = p.inNiceBlue('\nWhat do you do now? ').upper()
         split = self.rm_extra_words(entry.split(' '))
-        if entry == 'SHOW COLORS':
-            p.show_colors()
-        if entry in synonyms['Q']:
+        if entry[0] == '@':
+            self.god_commands(entry, split)
+        elif entry in synonyms['Q']:
             self.data_manager.store_data()
             exit()
         elif entry in synonyms['I']:
             self.player.pack()
-        elif split[0] == '@TEL':
-            if self.data.rooms[split[1]] is not None:
-                self.player.current_room = self.data.rooms[split[1]]
         elif split[0] in synonyms['GET']:
             self.player.take(split[-1])
         elif split[0] in synonyms['DROP']:

@@ -5,11 +5,9 @@ import pcolors as p
 import os.path as path
 import csv
 
-def knife_use():
-    print('This is the knife being used. Chop chop.')
 
 items = {
-    'knife': Item("knife","a rusty knife","""It's an old rusty knife. You don't think it would cut very well.""",used=knife_use),
+    'knife': Item("knife","a rusty knife","""It's an old rusty knife. You don't think it would cut very well."""),
     'rope': Item("rope","an old rope","""It looks like someone used this a very long time ago. It is worn and fraying. It might just hold your weight, but it could give out any moment."""),
     'flashlight': LightSource("flashlight","a flashlight","""It's a flashlight.""",on=False),
     'cave': Item("cave","the mouth of the cave","""Jagged stalactites hang from the roof of the cave, reminding you of some grotesque beast's fangs."""),
@@ -45,6 +43,7 @@ class Defaults:
         self.player = Player('', None)
         self.items = items
         self.rooms = rooms
+        self.functions = {}
         self.rooms_to_connect = []
         self.process_csv_file('rooms')
         self.process_csv_file('items')
@@ -61,15 +60,14 @@ class Defaults:
         self.rooms['fifth'].set_direction('N',rooms['sixth'])
         self.rooms['sixth'].set_direction('NE',rooms['seventh'])
         self.rooms['seventh'].set_direction('N',rooms['overlook'])
-        self.rooms['second'].set_direction('E',rooms['narrow2'])
-        self.rooms['narrow2'].set_direction('N',rooms['narrow3'])
-        #self.rooms['second'].set_direction('E',rooms['narrow'])
         self.rooms['narrow'].set_direction('N',rooms['treasure'])
         self.rooms['overlook'].set_direction('D',rooms['cliffside'])
         self.rooms['cliffside'].set_direction('D',rooms['bottom'])
         self.rooms['bottom'].set_direction('W',rooms['streambed'])
         self.rooms['streambed'].set_direction('W',rooms['beach'])
-        print(self.rooms_to_connect)
+        for path in self.rooms_to_connect:
+            path_split = path.split('.')
+            self.rooms[path_split[0]].set_direction(path_split[1].upper(),rooms[path_split[2]])
 
     def process_csv_file(self,name):
         csv_filename = './data/{}.csv'.format(name)
@@ -99,11 +97,13 @@ class Defaults:
             elif item_or_feature == 'L':
                 item = LightSource(item_name,long_name,description,on=is_on)
                 self.items[item_name.lower()] = item
-                self.rooms[rooms[0]].add_item(item)
+                for room in rooms:
+                    self.rooms[room].add_item(item)
             else:
                 item = Item(item_name,long_name,description)
                 self.items[item_name.lower()] = item
-                self.rooms[rooms[0]].add_item(item)
+                for room in rooms:
+                    self.rooms[room].add_item(item)
 
     def process_rooms(self,dict_reader):
         for row in dict_reader:
@@ -116,5 +116,18 @@ class Defaults:
             room = Room(room_name,description,lit=is_lit,contents=[],features=[])
             self.rooms[room_tag] = room
             paths = row['Paths'].split(' ')
-            for path in paths:
-                self.rooms_to_connect.append('{}.{}'.format(room_tag,path))
+            if paths[0] != '':
+                for path in paths:
+                    self.rooms_to_connect.append('{}.{}'.format(room_tag,path))
+
+# def knife_use(knife):
+#     print('This is the knife being used. Chop chop.')
+#
+# def lantern_use(lantern):
+#     print('Ouch! You burn yourself on the lantern!')
+#     lantern.turn_off()
+#
+# functions = {
+#     'knife_use': knife_use,
+#     'lantern_use': lantern_use
+# }
