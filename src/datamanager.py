@@ -30,3 +30,13 @@ class DataManager:
         self.data['rooms'] = defaults.rooms
         self.data['items'] = defaults.items
         self.data['npcs'] = defaults.npcs
+
+
+class Reporter:
+    def __init__(self, player):
+        self.player = player
+
+    def buffer(self,report,room):
+        if room.tag == self.player.current_room.tag:
+            print(report)
+        # print(">>{} in {}<<".format(report,room.tag))

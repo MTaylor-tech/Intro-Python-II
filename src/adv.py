@@ -1,9 +1,10 @@
 import textwrap
 import os.path as path
-from datamanager import DataManager
+from datamanager import DataManager, Reporter
 from vars import synonyms, opposites, directions
 import pcolors as p
 from item_functions import sb
+from npc_controller import NPCController
 
 
 class Adventure:
@@ -12,10 +13,15 @@ class Adventure:
         self.data = data_manager.data
         self.data_manager = data_manager
         sb.set_datamanager(data_manager)
+        self.npc_controller = NPCController(data_manager)
+        self.reporter = Reporter(self.player)
+        for npc in self.data.get('npcs'):
+            self.data['npcs'][npc].reporter = self.reporter
 
     def mainLoop(self):
         self.show_room()
         self.get_input()
+        self.npc_controller.step()
 
     def show_room(self):
         current_room = self.player.current_room
@@ -33,6 +39,10 @@ class Adventure:
                 for char in current_room.characters:
                     if char is not self.player:
                         print(char.name)
+            if len(current_room.visible_exits) > 0:
+                string = ', '.join(current_room.visible_exits)
+                p.prYellow('Visible exits: {}'.format(string))
+
         else:
             p.prGrey('\nIt is dark here.\n')
 
@@ -90,6 +100,8 @@ class Adventure:
 
     def get_input(self):
         raw = p.inNiceBlue('\nWhat do you do now? ')
+        if raw == '':
+            return
         entry = raw.upper()
         split = self.rm_extra_words(entry.split(' '))
         spRaw = raw.split(' ')

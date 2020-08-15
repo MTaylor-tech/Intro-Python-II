@@ -16,19 +16,25 @@ class Defaults:
         self.process_csv_file('rooms')
         self.process_csv_file('items')
         self.player.current_room = self.rooms['outside']
+        self.rooms['outside'].characters.append(self.player)
         self.connect_rooms()
-        self.npcs['alfred'] = NonPlayerCharacter('a man','Lord Alfred','A tall slender man.',self.rooms['outside'])
-        self.rooms['outside'].characters.extend([self.player,self.npcs['alfred']])
+        self.process_csv_file('npcs')
 
     def connect_rooms(self):
         for path in self.rooms_to_connect:
             path_split = path.split('.')
             origin = self.rooms.get(path_split[0].lower())
             direction = path_split[1].upper()
-            target = self.rooms.get(path_split[2].lower())
+            target = None
+            visible = True
+            if len(path_split) > 3:
+                target = self.rooms.get(path_split[3].lower())
+                visible = False
+            else:
+                target = self.rooms.get(path_split[2].lower())
             if origin is not None and target is not None:
                 # print("|{}| goes |{}| to |{}|".format(origin.name,direction,target.name))
-                origin.set_direction(direction,target)
+                origin.set_direction(direction,target,visible)
             else:
                 print('Something is None')
 
@@ -41,6 +47,8 @@ class Defaults:
                     self.process_items(dict_reader)
                 if name == 'rooms':
                     self.process_rooms(dict_reader)
+                if name == 'npcs':
+                    self.process_npcs(dict_reader)
 
     def process_items(self,dict_reader):
         for row in dict_reader:
@@ -87,3 +95,31 @@ class Defaults:
             if paths[0] != '':
                 for path in paths:
                     self.rooms_to_connect.append('{}.{}'.format(room_tag,path))
+
+    def process_npcs(self,dict_reader):
+        for row in dict_reader:
+            tag = row['Tag'].lower()
+            npc_name = row['Name']
+            long_name = row['Long Name']
+            description = row['Description']
+            description = description.replace('xi[',p.italic)
+            description = description.replace('xb[',p.bold)
+            description = description.replace(']x',p.clear_style)
+            room_tag = row['Starting Room']
+            room = self.rooms.get(room_tag)
+            inventory = row['Inventory']
+            mobile = int(row['Mobile'])
+            fence = int(row['Fence'])
+            sayings = row['Sayings'].split('|')
+            talkative = int(row['Talkative'])
+            poses = row['Poses'].split('|')
+            char = NonPlayerCharacter(name=npc_name,long_name=long_name,description=description,current_room=room,inventory=[],mobile=mobile,fence=fence,sayings=sayings,poses=poses,talkative=talkative)
+            if len(inventory) > 0:
+                inventory = inventory.split(' ')
+                for item_name in inventory:
+                    item = self.items.get(item_name)
+                    if item is not None:
+                        char.inventory.append(item)
+            if room is not None:
+                room.characters.append(char)
+            self.npcs[tag] = char

@@ -1,5 +1,5 @@
 Tag,Name,Description,Lit,Paths,,
-narrow2,A Narrow Passageway,This part of the cave is a tight squeeze. You can barely breathe from the closeness of the rock walls and the smell of something long dead. The narrow path leads north and west.,N,w.second n.narrow3,,
+narrow2,A Narrow Passageway,This part of the cave is a tight squeeze. You can barely breathe from the closeness of the rock walls and the smell of something long dead. The narrow path leads north and west.,N,w.second.h n.narrow3,,
 narrow3,A Narrow Passageway,"Narrow and dark, it’s spooky in here, especially because you can’t see what’s around the bend. It’s hot, too. The passageway forks here, and tight openings lead north, south, and east. A bubbling sound can be heard to the north.",N,s.narrow2 n.pools,,
 pools,The Hot Pools,Hot steam bubbles up from the three geothermal xi[pools]x in this room.,N,s.narrow3,,
 ncavern,North Cavern,The path opens into a huge cavern. You can hear your movements echo among the pillars and stalactites. The path winds through the middle of this chamber into the other half of the cavern to the south. A small opening leads west.,N,w.narrow3 s.scavern,,

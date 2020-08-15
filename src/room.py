@@ -14,6 +14,7 @@ class Room:
         self.features = []
         self.first_visit = True
         self.characters = []
+        self.visible_exits = []
         self.exits = {}
         for direction in directions:
             self.exits[direction] = None
@@ -24,20 +25,24 @@ class Room:
         else:
             return self
 
-    def set_direction(self, direction, room):
+    def set_direction(self, direction, room, visible):
         if self.exits[direction] is None and\
                 room.exits[opposites[direction]] is None:
             self.exits[direction] = room
             room.exits[opposites[direction]] = self
+            if visible:
+                self.visible_exits.append(direction)
+                room.visible_exits.append(opposites[direction])
 
     def is_lit(self, player):
         lit = self.lit
         for item in self.contents:
             if isinstance(item, LightSource):
                 if item.on:
-                    lit = True
-        if player.has_light():
-            lit = True
+                    return True
+        for char in self.characters:
+            if char.has_light():
+                return True
         return lit
 
     def has_item(self, item_name):
@@ -72,6 +77,13 @@ class Room:
                 if isinstance(char,NonPlayerCharacter):
                     if char_name in char.name.upper() or char_name in char.long_name.upper():
                         return char
+        return None
+
+    def has_player(self):
+        if len(self.characters) > 0:
+            for char in self.characters:
+                if not isinstance(char,NonPlayerCharacter):
+                    return char
         return None
 
     def add_item(self, item):
