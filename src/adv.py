@@ -7,6 +7,7 @@ from item_functions import sb
 from npc_controller import NPCController
 
 
+
 class Adventure:
     def __init__(self, data_manager):
         self.player = data_manager.data['player']
@@ -15,6 +16,7 @@ class Adventure:
         sb.set_datamanager(data_manager)
         self.npc_controller = NPCController(data_manager)
         self.reporter = Reporter(self.player)
+        sb.set_reporter = self.reporter
         for npc in self.data.get('npcs'):
             self.data['npcs'][npc].reporter = self.reporter
 

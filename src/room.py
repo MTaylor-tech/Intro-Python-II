@@ -74,7 +74,7 @@ class Room:
     def has_char(self, char_name):
         if len(self.characters) > 0:
             for char in self.characters:
-                if isinstance(char,NonPlayerCharacter):
+                if not char.is_player():
                     if char_name in char.name.upper() or char_name in char.long_name.upper():
                         return char
         return None
@@ -82,7 +82,7 @@ class Room:
     def has_player(self):
         if len(self.characters) > 0:
             for char in self.characters:
-                if not isinstance(char,NonPlayerCharacter):
+                if char.is_player():
                     return char
         return None
 

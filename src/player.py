@@ -19,6 +19,9 @@ class Player:
         elif c == 3:
             return "I'm not sure, but it might be {}.".format(self.name)
 
+    def is_player(self):
+        return True
+
     def go(self, direction):
         new_room = self.current_room.check_direction(direction)
         if new_room is self.current_room:
@@ -123,6 +126,7 @@ class Player:
         else:
             print('\nWhat would you like to say?')
 
+
 class NonPlayerCharacter(Player):
     def __init__(self, name, long_name, description, current_room, inventory=[],sayings=[],poses=[],actions=[],mobile=0,fence=0,talkative=0):
         super().__init__(name, current_room, inventory)
@@ -137,36 +141,27 @@ class NonPlayerCharacter(Player):
         self.reporter = None
         self.talkative = talkative
 
-    def say(self, phrase):
-        #phrase.remove(phrase[0])
-        #phrase = ' '.join(phrase)
+    def is_player(self):
+        return False
 
+    def say(self, phrase):
         self.reporter.buffer('\n{} says, \"{}\"'.format(self.long_name,phrase),self.current_room)
-        #print('\n{} says, \"{}\"'.format(self.long_name,phrase))
-        # p.prOrange(">>{}: {}<<".format(self.name,phrase))
 
     def go(self, direction):
         new_room = self.current_room.check_direction(direction)
-        # p.prOrange(">>New Room: {}".format(new_room.tag))
         if new_room is not self.current_room:
             move = False
             if len(self.path_home) > 0:
-                # p.prOrange(">>>Len path_home > 0")
                 if direction == self.path_home[-1]:
-                    # p.prOrange(">>>>Heading toward home")
                     move = True
                     self.path_home.pop()
                 elif len(self.path_home) <= self.fence:
-                    # p.prOrange(">>>>Away from home but still in fence")
                     move = True
                     self.path_home.append(direction)
             elif len(self.path_home) <= self.fence:
-                # p.prOrange(">>>")
                 move = True
                 self.path_home.append(direction)
             if move:
-                # if self.current_room.has_player():
-                    # print("{} goes {}.".format(self.name,synonyms[direction][1].lower()))
                 self.reporter.buffer("{} goes {}.".format(self.name,synonyms[direction][1].lower()),self.current_room)
                 self.current_room.characters.remove(self)
                 self.current_room = new_room
@@ -188,6 +183,7 @@ class NonPlayerCharacter(Player):
             self.use(spRaw[1].upper())
         else:
             print("I don't know what you mean by \"{}\"".format(' '.join(spRaw)))
+
 
 class NPCAction:
     def __init__(self,chance,action,target):

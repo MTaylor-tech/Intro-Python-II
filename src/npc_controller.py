@@ -18,7 +18,6 @@ class NPCController:
                     self.move_random(npc)
                     self.say_random(npc)
 
-
     def move_random(self,npc):
         if npc.mobile > 0:
             rand = r.randint(1,10)
@@ -34,4 +33,3 @@ class NPCController:
             if rand <= npc.talkative:
                 rand = r.randint(1,len(npc.sayings))
                 npc.say(npc.sayings[rand-1])
-                # p.prOrange(">>{}: {}<<".format(npc.name,npc.sayings[rand-1]))

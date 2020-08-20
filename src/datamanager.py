@@ -39,4 +39,3 @@ class Reporter:
     def buffer(self,report,room):
         if room.tag == self.player.current_room.tag:
             print(report)
-        # print(">>{} in {}<<".format(report,room.tag))
